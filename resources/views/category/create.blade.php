@@ -29,12 +29,10 @@
                                     <option value="inactivo">Inactivo</option>
                                 </select>                                
                             </div>
-                                <div class="d-flex justify-content-between mt-3">
-                                <!-- Botón Enviar -->
+                                <div class="d-flex justify-content-between mt-3">                                
                                 <button type="submit" class="btn btn-dark d-flex align-items-center">
                                     <i class="bi bi-send-fill me-1"></i> Enviar
-                                </button>
-                                <!-- Botón Retroceder -->
+                                </button>                                
                                 <button type="button" class="btn btn-outline-dark d-flex align-items-center" onclick="history.back()">
                                     <i class="bi bi-arrow-left me-1"></i> Retroceder
                                 </button>                                

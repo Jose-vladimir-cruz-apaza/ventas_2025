@@ -1,7 +1,13 @@
 @extends('layouts.app')
 @section('content_header')
-    <h1>Categories</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Categories</h1>
+        <a href="{{ route('category.create') }}" class="btn btn-success btn-sm">
+            <i class="fas fa-plus"></i> Nuevo
+        </a>
+    </div>
 @stop
+
 @section('content')
     <!-- Main content -->
     <section class="content">
@@ -36,9 +42,13 @@
                                         @endif
                                     </td> 
                                     <td>
-                                        <button class="btn btn-info btn-sm">Ver</button>
-                                        <button class="btn btn-warning btn-sm">Editar</button>
-                                        <button class="btn btn-danger btn-sm">Eliminar</button>
+                                        
+                                        <button class="btn btn-warning btn-sm mr-1">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> 
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>

@@ -62,8 +62,8 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
     */
-
-    'logo' => '<b>Admin</b>LTE',
+    //cambio
+    'logo' => '<b>Tecno Tec</b>',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -113,7 +113,7 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            // 'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -322,8 +322,13 @@ return [
         ],
         // otros
         [
-            'text' => 'categorias',
+            'text' => 'Categorias',
             'url' =>  'category',
+            'icon' => 'far fa-fw fa-file',                        
+        ],
+        [
+            'text' => 'Productos',
+            'url' =>  'product',
             'icon' => 'far fa-fw fa-file',                        
         ],
         // fin otros

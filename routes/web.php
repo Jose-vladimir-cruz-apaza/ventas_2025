@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Product\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,18 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', function () {
-    return view('auth.login');
-});
+// Route::get('/home', function () {
+//     return view('category.index');
+// });
 
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', function () {
-    return view('home');
+    return view('/');
 });
 
 Route::resource('order',OrderController::class);
 Route::resource('category',CategoryController::class);
-Route::resource('product',OrderController::class);
+Route::resource('product',ProductController::class);

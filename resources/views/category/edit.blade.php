@@ -22,15 +22,25 @@
                             
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Ingresa el nombre de la categoría" name="name" value="{{ isset($category) ? $category->name : old('name') }}" required>
+                                <select class="form-control" id="nombre" name="name" required>
+                                    <option value="">-- Selecciona una categoría --</option>
+                                    <option value="Computadoras" 
+                                        {{ (isset($category) && $category->name == 'Computadoras') || old('name') == 'Computadoras' ? 'selected' : '' }}>
+                                        Computadoras
+                                    </option>
+                                    <option value="Electrodomésticos" 
+                                        {{ (isset($category) && $category->name == 'Electrodomésticos') || old('name') == 'Electrodomésticos' ? 'selected' : '' }}>
+                                        Electrodomésticos
+                                    </option>
+                                    <option value="Componentes electronicos" 
+                                        {{ (isset($category) && $category->name == 'Componentes electronicos') || old('name') == 'Componentes electronicos' ? 'selected' : '' }}>
+                                        Componentes electrónicos
+                                    </option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Descripción</label>
                                 <input type="text" class="form-control" id="descripcion" placeholder="Ingresa la descripción" name="description" value="{{ isset($category) ? $category->description : old('description') }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="imagen" class="form-label">Imagen</label>
-                                <input type="text" class="form-control" id="imagen" placeholder="Ingresa la URL de la imagen" name="imagen" value="{{ isset($category) ? $category->imagen : old('imagen') }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="state" class="form-label">Estado</label>

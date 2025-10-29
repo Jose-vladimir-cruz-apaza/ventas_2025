@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('imagen');
+            $table->enum('name', [
+                'Computadoras',
+                'Electrodomésticos',
+                'Componentes electronicos'
+            ]);
+            $table->string('description');            
             $table->enum('state',['activo','inactivo']);
             $table->timestamps();
         });

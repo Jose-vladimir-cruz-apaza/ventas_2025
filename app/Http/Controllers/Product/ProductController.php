@@ -5,102 +5,84 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Provider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {                        
-        $products = Product::with('category')->get();       
-        return view('product.index', compact('products'));
+public function index()
+    {
+        $products = Product::with(['category', 'provider'])->latest()->get();
+        return view('products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Necesitamos las categorías para el select
         $categories = Category::all();
-        return view('product.create', compact('categories'));
+        $providers = Provider::all();
+        return view('products.create', compact('categories', 'providers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'marca' => 'nullable|string|max:255',
-            'modelo' => 'nullable|string|max:255',
-            'codigo_product' => 'required|string|unique:products,codigo_product',
-            'precio' => 'required|numeric',
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'categorie_id' => 'required|exists:categories,id',
+            'provider_id' => 'nullable|exists:providers,id',
+            'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'imagen' => 'nullable',
-            'category_id' => 'required|exists:categories,id'
+            'specifications' => 'required|string',
+            'stock_minimum' => 'required|integer|min:0',
         ]);
 
-        // // Manejo de la imagen si se sube
-        // if ($request->hasFile('imagen')) {
-        //     $path = $request->file('imagen')->store('products', 'public');
-        //     $validated['imagen'] = $path;
-        // }
+        Product::create([
+            'user_id' => Auth::id(),
+            'categorie_id' => $request->categorie_id,
+            'provider_id' => $request->provider_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'cod_prod' => $request->cod_prod ?? uniqid('PROD-'),            
+            'specifications' => $request->specifications,
+            'stock_minimum' => $request->stock_minimum,
+            'stock' => $request->stock,
+            'imagen_url' => $request->imagen_url,
+            'brand' => $request->brand,
+            'cant' => $request->cant ?? 0,
+            'price' => $request->price,
+            'discount' => $request->discount ?? 0,
+            'active' => $request->active ?? true,
+        ]);
 
-        Product::create($validated);
-        return redirect()->route('product.index')->with('success', 'Producto creado correctamente.');
+        return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id);
-        $categories = Category::all(); // Para mostrar en el select
-        return view('product.edit', compact('product', 'categories'));
+        $categories = Category::all();
+        $providers = Provider::all();
+        return view('products.edit', compact('product', 'categories', 'providers'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product)
     {
-
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'marca' => 'nullable|string|max:255',
-            'modelo' => 'nullable|string|max:255',
-            'codigo_product' => 'required|string|unique:products,codigo_product,' . $product->id,
-            'precio' => 'required|numeric',
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'categorie_id' => 'required|exists:categories,id',
+            'provider_id' => 'nullable|exists:providers,id',
+            'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'imagen' => 'nullable',
-            'category_id' => 'required|exists:categories,id'
+            'stock_minimum' => 'required|integer|min:0',
         ]);
 
-        // if ($request->hasFile('imagen')) {
-        //     $path = $request->file('imagen')->store('products', 'public');
-        //     $validated['imagen'] = $path;
-        // }
+        $product->update($request->all());
 
-        $product->update($validated);
-
-        return redirect()->route('product.index')->with('success', 'Producto actualizado correctamente.');
+        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {        
-        $product = Product::findOrFail($id);
+    public function destroy(Product $product)
+    {
         $product->delete();
-        return redirect()->route('product.index')->with('success', 'Producto eliminado correctamente.');
+        return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente.');
     }
 }

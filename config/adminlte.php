@@ -324,13 +324,46 @@ return [
         [
             'text' => 'Categorias',
             'url' =>  'category',
-            'icon' => 'far fa-fw fa-file',                        
+            'icon' => 'fas fa-folder',                        
+        ],
+        [
+            'text' => 'Usuarios',
+            'url' =>  'users',
+            'icon' => 'fas fa-users',                        
+        ],
+        [
+            'text' => 'Proveedor',
+            'url' =>  'provider',
+            'icon' => 'fas fa-truck',                        
         ],
         [
             'text' => 'Productos',
-            'url' =>  'product',
-            'icon' => 'far fa-fw fa-file',                        
+            'url' =>  'products',
+            'icon' => 'fas fa-box',                        
         ],
+        [
+            'text' => 'Clientes',
+            'url' =>  'clients',
+            'icon' => 'fas fa-user',                        
+        ],
+        [
+            'text' => 'ventas',
+            'url' =>  'sales',
+            'icon' => 'fas fa-user',                        
+        ],
+        [
+            'text' => 'Detale ventas',
+            'url' =>  'sale_details',
+            'icon' => 'fas fa-user',                        
+        ],
+        [
+            'text' => 'Roles',
+            'url' =>  'rols',
+            'icon' => 'fas fa-user',    
+            'can'  => 'view-roles-menu',                    
+        ],
+        
+        
         // fin otros
         // [
         //     'text' => 'pages',

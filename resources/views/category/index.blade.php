@@ -36,19 +36,16 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>                                
-                                <th>Imagen</th>
+                                <th>Nombre</th>                                                                
                                 <th>Estado</th>                                    
                                 <th>Acciones</th>
-                                <i class="ic-user"></i> Users
                             </tr>
                         </thead>           
                         @foreach ($category as $category)
                             <tbody>
                                 <tr>
                                     <td>{{$category->id}}</td>  
-                                    <td>{{$category->name}}</td>                                
-                                    <td>{{$category->imagen}}</td>  
+                                    <td>{{$category->name}}</td>                                                                    
                                     <td>
                                         @if($category->state == 'inactivo')
                                             <span class="badge bg-danger">{{ $category->state }}</span>

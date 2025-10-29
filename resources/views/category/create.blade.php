@@ -12,16 +12,17 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" placeholder="Ingresa el nombre de la categoría" name="name" required>
+                                <select class="form-control" id="nombre" name="name" required>
+                                    <option value="">-- Selecciona una categoría --</option>
+                                    <option value="Computadoras">Computadoras</option>
+                                    <option value="Electrodomésticos">Electrodomésticos</option>
+                                    <option value="Componentes electronicos">Componentes electrónicos</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Descripción</label>
                                 <input type="text" class="form-control" id="descripcion" placeholder="Ingresa la descripción" name="description" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="imagen" class="form-label">Imagen</label>
-                                <input type="text" class="form-control" id="imagen" placeholder="Ingresa la URL de la imagen" name="imagen" required>
-                            </div>
+                            </div>                            
                             <div class="mb-3">
                                 <label for="status" class="form-label">Estado</label>
                                 <select class="form-select" id="state" name="state">

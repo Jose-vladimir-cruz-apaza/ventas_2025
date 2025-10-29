@@ -72,48 +72,72 @@ class SaleDetailController extends Controller
         return view('sale_details.edit', compact('saleDetail', 'sales', 'products'));
     }
 
-    public function update(Request $request, SaleDetail $saleDetail)
-    {
-        $request->validate([
-            'sale_id' => 'required|exists:sales,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'status' => 'required|in:active,returned,canceled',
-        ]);
+public function update(Request $request, SaleDetail $saleDetail)
+{
+    $request->validate([
+        'sale_id' => 'required|exists:sales,id',
+        'product_id' => 'required|exists:products,id',
+        'quantity' => 'required|integer|min:1',
+        'unit_price' => 'required|numeric|min:0',
+        'discount' => 'nullable|numeric|min:0',
+        'status' => 'required|in:active,returned,canceled',
+    ]);
 
-        $product = Product::find($request->product_id);
+    $product = Product::find($request->product_id);
+    $oldQuantity = $saleDetail->quantity;
+    $newQuantity = $request->quantity;
 
-        // 🧠 Verificar stock antes de actualizar
-        if ($product->stock < $request->quantity) {
-            return redirect()->back()->with('error', 'No hay suficiente stock disponible para este producto.');
+    // 🔹 Calcular diferencia (nueva - antigua)
+    $difference = $newQuantity - $oldQuantity;
+
+    // 🧠 Si intenta vender más productos
+    if ($difference > 0) {
+        if ($product->stock < $difference) {
+            // ❌ No hay suficiente stock
+            return redirect()->back()->with('error', 'No hay suficiente stock disponible para aumentar la cantidad.');
         }
 
-        $subtotal = ($request->quantity * $request->unit_price) - ($request->discount ?? 0);
-
-        $saleDetail->update([
-            'sale_id' => $request->sale_id,
-            'product_id' => $request->product_id,
-            'product_name' => $product->name,
-            'product_code' => $product->cod_prod ?? null,
-            'quantity' => $request->quantity,
-            'unit_price' => $request->unit_price,
-            'discount' => $request->discount ?? 0,
-            'subtotal' => $subtotal,
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
-
-        // 🔽 Reducir el stock
-        $product->decrement('stock', $request->quantity);
-
-        return redirect()->route('sale_details.index')->with('success', 'Detalle de venta actualizado correctamente.');
+        // ✅ Reducir stock por la diferencia
+        $product->decrement('stock', $difference);
     }
+    // 🔄 Si reduce la cantidad (devolver productos al stock)
+    elseif ($difference < 0) {
+        $product->increment('stock', abs($difference));
+    }
+
+    // Calcular subtotal actualizado
+    $subtotal = ($newQuantity * $request->unit_price) - ($request->discount ?? 0);
+
+    // Actualizar el detalle
+    $saleDetail->update([
+        'sale_id' => $request->sale_id,
+        'product_id' => $request->product_id,
+        'product_name' => $product->name,
+        'product_code' => $product->cod_prod ?? null,
+        'quantity' => $newQuantity,
+        'unit_price' => $request->unit_price,
+        'discount' => $request->discount ?? 0,
+        'subtotal' => $subtotal,
+        'status' => $request->status,
+        'notes' => $request->notes,
+    ]);
+
+    return redirect()->route('sale_details.index')->with('success', 'Detalle de venta actualizado correctamente.');
+}
+
+
 
     public function destroy(SaleDetail $saleDetail)
     {
+        $product = $saleDetail->product;
+
+        if ($product) {
+            $product->increment('stock', $saleDetail->quantity);
+        }
+
         $saleDetail->delete();
-        return redirect()->route('sale_details.index')->with('success', 'Detalle eliminado correctamente.');
+
+        return redirect()->route('sale_details.index')->with('success', 'Detalle eliminado y stock restablecido correctamente.');
     }
+
 }
